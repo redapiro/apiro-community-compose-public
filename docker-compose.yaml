@@ -1,0 +1,76 @@
+version: '3'
+services:
+  app:
+    image: ${APIRO_BE_REPO}:${APIRO_BE_IMAGEID}
+    ports:
+      - 8081:80
+      - 8082:81
+    working_dir: /workdir
+    volumes:
+      - ./apiro-workdir:/apirowork
+      - ./apiro-output:/apiro-output
+      - ./apiro-input:/apiro-input
+      - ./maven:/maven
+    deploy:
+      resources:
+        limits:
+#          cpus: '2.0'
+          memory: 6000M
+    env_file:
+      - apiro-${SUBFILE}properties.env
+    environment:
+      APIRO_SYS_SECRET: knlfdafpjiu49q3tuhuhfa98uryu8twhaiehf8twiufahp849rhwafewr43wrfwe
+      APIRO_JWT_SECRET: sdfgdfgsdfkgji5j09yt45gktrspogk0e9090gk0w9se0erfdogk490095635465
+      APIRO_HAZELMEMBER: app
+      APIRO_HAZELSMARTROUTE: false
+      APIRO_ALWAYSMASTER: true
+      SPRING_DATA_MONGODB_URI: mongodb://mongo/apiro
+      SPRING_PROFILES_ACTIVE: compose,NOCORS
+      APIRO_ADMINUSER: admin
+      APIRO_ADMINKEYSECRET: "93718395736384984363"
+      APIRO_INSTANCEID: APIRO_PRE_DEMO
+      APIRO_DECIMALS: 8
+      SERVER_PORT: 80
+      APIRO_WORKDIR: /apirowork
+      MAVEN_HOME: /maven
+      JVM_OPTS: "${JVM_OPTS} -Dimportfeed=${RUNFEED_ON_START}"
+  frontend:
+    image: ${APIRO_FE_REPO}:${APIRO_FE_IMAGEID}
+    restart: always
+    ports:
+      - 8080:80
+    deploy:
+      resources:
+        limits:
+#          cpus: '1.0'
+          memory: 100M
+    entrypoint: [ "sh", "-c", "echo STARTING UP NGINX; echo '8081' > /usr/share/nginx/html/assets/assets/misc/api.txt; echo KICKING OFF ENTRYPOINT; nginx -g 'daemon off;'" ]
+  mongo:
+    image: mongo:7
+    restart: always
+    ports:
+      - 27018:27017
+    volumes:
+      - ./mongo-data:/data/db
+    deploy:
+      resources:
+        limits:
+#          cpus: '2.0'
+          memory: 1000M
+    logging:
+      driver: none
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0", "--setParameter", "transactionLifetimeLimitSeconds=360"]
+  mongoinit:
+    image: mongo:7
+    restart: on-failure:1
+    volumes:
+      - ./mongo-data:/md
+    logging:
+      driver: none
+    deploy:
+      resources:
+        limits:
+#          cpus: '0.1'
+          memory: 100M
+    entrypoint: [ "sh", "-c", "until mongosh --host mongo -eval 'print(\"waiting for connection\")'; do sleep 2; done;  if [ ! -f /md/RSMARKER ]; then echo INITIALIZING REPLSET!!!!!!; mongosh --host mongo --eval 'rs.initiate({_id: \"rs0\", members: [{ _id: 0, host: \"mongo\" }]})'; fi; touch /md/RSMARKER"]
+
