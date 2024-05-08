@@ -3,8 +3,8 @@ services:
   app:
     image: ${APIRO_BE_REPO}:${APIRO_BE_IMAGEID}
     ports:
-      - 8081:80
-      - 8082:81
+      - ${APIRO_REST_PORT}:80
+      - ${APIRO_WS_PORT}:81
     working_dir: /workdir
     volumes:
       - ./apiro-workdir:/apirowork
@@ -38,18 +38,20 @@ services:
     image: ${APIRO_FE_REPO}:${APIRO_FE_IMAGEID}
     restart: always
     ports:
-      - 8080:80
+      - ${APIRO_WEB_PORT}:80
     deploy:
       resources:
         limits:
 #          cpus: '1.0'
           memory: 100M
-    entrypoint: [ "sh", "-c", "echo STARTING UP NGINX; echo '8081' > /usr/share/nginx/html/assets/assets/misc/api.txt; echo KICKING OFF ENTRYPOINT; nginx -g 'daemon off;'" ]
+    environment:
+      BASE_PORT: ${APIRO_WEB_PORT}
+    entrypoint: [ "sh", "-c", "echo STARTING UP NGINX WITH BASE REST PORT $APIRO_REST_PORT; echo $APIRO_REST_PORT > /usr/share/nginx/html/assets/assets/misc/api.txt; echo KICKING OFF ENTRYPOINT; nginx -g 'daemon off;'" ]
   mongo:
     image: mongo:7
     restart: always
     ports:
-      - 27018:27017
+      - ${APIRO_MONGO_PORT}:27017
     volumes:
       - ./mongo-data:/data/db
     deploy:

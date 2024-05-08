@@ -23,10 +23,11 @@ fi
 if [ ! "$1" == "v1" ]; then
   echo =======
   echo 'usage: runapiro.sh v1 <profile> [clean]'
+  echo 'v1 is the version of program argumentoptions to use and is currently the only option. allows for backward compatible changes'
   echo '<profile> sets the env file to initialise with ie profile "default" will use apiro-default-properties.env'
   echo 'clean is optional - if set it starts mongo db empty'
-  echo 'full example 1 - runapiro.sh v1 default'
-  echo 'full example 2 - runapiro.sh v1 default clean'
+  echo 'full example 1 - runapiro.sh v1 myprof'
+  echo 'full example 2 - runapiro.sh v1 apiroexamples-pub clean'
   echo 'NOTE: execution uses docker compose - DOCKER must be installed and running'
   echo =======
   exit
@@ -50,6 +51,11 @@ APIRO_FE_REPO="apiromdm/apiro-ui-community-public"
 APIRO_BE_IMAGEID="latest"
 APIRO_FE_IMAGEID="latest"
 
+APIRO_WEB_PORT=8080
+APIRO_REST_PORT=8081
+APIRO_WS_PORT=8082
+APIRO_MONGO_PORT=27018
+
 if [ "$CLN" == "clean" ]; then
   echo STARTING MONGO EMPTY!!!!!
   if [ -d "./mongo-data" ]; then
@@ -70,12 +76,15 @@ export APIRO_FE_REPO
 export JVM_OPTS
 export RUNFEED_ON_START
 
+export APIRO_WEB_PORT
+export APIRO_REST_PORT
+export APIRO_WS_PORT
+export APIRO_MONGO_PORT
+
 echo USING ENV FILE $FULLFILE
 
 echo $APIRO_BE_REPO:$APIRO_BE_IMAGEID $APIRO_FE_REPO:$APIRO_FE_IMAGEID
 
 docker compose pull
 
-
-
-docker compose --env-file "$FULLFILE" -p apiro1 up --no-attach mongo --no-attach mongoinit --no-attach frontend
+docker compose --env-file "$FULLFILE" -p apiro1 up --attach app

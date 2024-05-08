@@ -23,7 +23,7 @@ IF NOT "%1"=="v1" (
 
 if NOT [%2] == [] (
    SET SUBFILE=%2-
-) 
+)
 
 IF "%3"=="clean" (
    echo STARTING MONGO EMPTY
@@ -36,6 +36,11 @@ SET APIRO_FE_REPO=apiromdm/apiro-ui-community-public
 
 SET APIRO_BE_IMAGEID=latest
 SET APIRO_FE_IMAGEID=latest
+
+SET APIRO_WEB_PORT=8080
+SET APIRO_REST_PORT=8081
+SET APIRO_WS_PORT=8082
+SET APIRO_MONGO_PORT=27018
 
 SET FULLFILE=apiro-%SUBFILE%properties.env
 
@@ -61,7 +66,4 @@ echo USING ENV FILE %FULLFILE%
 echo %APIRO_BE_REPO%:%APIRO_BE_IMAGEID% %APIRO_FE_REPO%:%APIRO_FE_IMAGEID%
 
 docker compose pull
-docker compose --env-file %FULLFILE% -p apiro1 up
-
-
-
+docker compose --env-file %FULLFILE% -p apiro1 up --attach app
