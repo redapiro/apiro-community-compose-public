@@ -61,7 +61,7 @@ echo USING ENV FILE %FULLFILE%
 echo %APIRO_BE_REPO%:%APIRO_BE_IMAGEID% %APIRO_FE_REPO%:%APIRO_FE_IMAGEID%
 
 docker compose pull
-docker compose --env-file ./%FULLFILE% -p apiro1 up --no-attach mongo --no-attach mongoinit --no-attach frontend
+docker compose --env-file %FULLFILE% -p apiro1 up
 
 
 
