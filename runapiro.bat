@@ -28,6 +28,7 @@ if NOT [%2] == [] (
 IF "%3"=="clean" (
    echo STARTING MONGO EMPTY
    rmdir /s /q mongo-data
+   if not exist mongo-data mkdir mongo-data
 )
 
 SET APIRO_BE_REPO=apiromdm/apiro-server-community-public
