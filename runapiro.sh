@@ -52,8 +52,6 @@ APIRO_BE_IMAGEID="latest"
 APIRO_FE_IMAGEID="latest"
 
 APIRO_WEB_PORT=8080
-APIRO_REST_PORT=8081
-APIRO_WS_PORT=8082
 APIRO_MONGO_PORT=27018
 
 if [ "$CLN" == "clean" ]; then
@@ -66,6 +64,9 @@ fi
 FULLFILE="./apiro-${SUBFILE}properties.env"
 
 . $FULLFILE
+
+APIRO_REST_PORT=$( expr $APIRO_WEB_PORT + '1' )
+APIRO_WS_PORT=$( expr $APIRO_WEB_PORT + '2' )
 
 export APIRO_FE_IMAGEID
 export APIRO_BE_IMAGEID
