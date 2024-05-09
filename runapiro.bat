@@ -26,7 +26,7 @@ if NOT [%2] == [] (
 )
 
 IF "%3"=="clean" (
-   echo STARTING MONGO EMPTY
+   echo STARTING MONGO EMPTY - DELETING OLD DATA
    rmdir /s /q mongo-data
    if not exist mongo-data mkdir mongo-data
 )
@@ -39,6 +39,8 @@ SET APIRO_FE_IMAGEID=latest
 
 SET APIRO_WEB_PORT=8080
 SET APIRO_MONGO_PORT=27018
+
+SET COMPOSE_NAME=apiro1
 
 SET FULLFILE=apiro-%SUBFILE%properties.env
 
@@ -63,8 +65,10 @@ SET /a APIRO_REST_PORT=%APIRO_WEB_PORT%+1
 SET /a APIRO_WS_PORT=%APIRO_WEB_PORT%+2
 
 echo USING ENV FILE %FULLFILE%
-
-echo %APIRO_BE_REPO%:%APIRO_BE_IMAGEID% %APIRO_FE_REPO%:%APIRO_FE_IMAGEID%
+echo COMPOSE NAME is %COMPOSE_NAME%
+echo USING WEB PORTS %APIRO_WEB_PORT% %APIRO_REST_PORT% %APIRO_WS_PORT% - BROWSER TO localhost:%APIRO_WEB_PORT%
+echo USING MONGO PORT %APIRO_MONGO_PORT%
+echo USING DOCKER IMAGES: %APIRO_BE_REPO%:%APIRO_BE_IMAGEID% %APIRO_FE_REPO%:%APIRO_FE_IMAGEID%
 
 docker compose pull
-docker compose --env-file %FULLFILE% -p apiro1 up --attach app
+docker compose --env-file %FULLFILE% -p %COMPOSE_NAME% up --attach app

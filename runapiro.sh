@@ -54,6 +54,8 @@ APIRO_FE_IMAGEID="latest"
 APIRO_WEB_PORT=8080
 APIRO_MONGO_PORT=27018
 
+COMPOSE_NAME="apiro1"
+
 if [ "$CLN" == "clean" ]; then
   echo STARTING MONGO EMPTY!!!!!
   if [ -d "./mongo-data" ]; then
@@ -82,10 +84,14 @@ export APIRO_REST_PORT
 export APIRO_WS_PORT
 export APIRO_MONGO_PORT
 
-echo USING ENV FILE $FULLFILE
+export COMPOSE_NAME
 
-echo $APIRO_BE_REPO:$APIRO_BE_IMAGEID $APIRO_FE_REPO:$APIRO_FE_IMAGEID
+echo USING ENV FILE $FULLFILE
+echo COMPOSE NAME is $COMPOSE_NAME
+echo BINDING WEB PORTS $APIRO_WEB_PORT $APIRO_REST_PORT $APIRO_WS_PORT - BROWSER TO localhost:$APIRO_WEB_PORT
+echo BINDING MONGO PORT $APIRO_MONGO_PORT
+echo USING DOCKER IMAGES $APIRO_BE_REPO:$APIRO_BE_IMAGEID $APIRO_FE_REPO:$APIRO_FE_IMAGEID
 
 docker compose pull
 
-docker compose --env-file "$FULLFILE" -p apiro1 up --attach app
+docker compose --env-file "$FULLFILE" -p $COMPOSE_NAME up --attach app
