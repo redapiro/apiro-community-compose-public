@@ -70,5 +70,6 @@ echo USING WEB PORTS %APIRO_WEB_PORT% %APIRO_REST_PORT% %APIRO_WS_PORT% - BROWSE
 echo USING MONGO PORT %APIRO_MONGO_PORT%
 echo USING DOCKER IMAGES: %APIRO_BE_REPO%:%APIRO_BE_IMAGEID% %APIRO_FE_REPO%:%APIRO_FE_IMAGEID%
 
+docker compose -p %COMPOSE_NAME% down
 docker compose pull
 docker compose --env-file %FULLFILE% -p %COMPOSE_NAME% up --attach app --attach mongoinit
