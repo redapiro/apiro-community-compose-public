@@ -33,7 +33,7 @@ services:
       SERVER_PORT: 80
       APIRO_WORKDIR: /apirowork
       MAVEN_HOME: /maven
-      JVM_OPTS: ${JVM_OPTS} -Dimportfeed=${RUNFEED_ON_START} -XX:+UseZGC -XX:+ZGenerational
+      JVM_OPTS: ${JVM_OPTS} -Dimportfeed=${RUNFEED_ON_START} -Dprepause=${APIRO_PREPAUSE} -XX:+UseZGC -XX:+ZGenerational
   frontend:
     image: ${APIRO_FE_REPO}:${APIRO_FE_IMAGEID}
     restart: always
