@@ -23,11 +23,12 @@ fi
 if [ ! "$1" == "v1" ]; then
   echo =======
   echo 'usage: runapiro.sh v1 <profile> [clean]'
-  echo 'v1 is the version of program argumentoptions to use and is currently the only option. allows for backward compatible changes'
+  echo 'v1 is the version of program argument options to use and is currently the only option. allows for backward compatible changes'
   echo '<profile> sets the env file to initialise with ie profile "default" will use apiro-default-properties.env'
-  echo 'clean is optional - if set it starts mongo db empty'
+  echo 'clean is optional - if set it starts mongo db empty otherwise mongo db state is retained between executions'
   echo 'full example 1 - runapiro.sh v1 myprof'
   echo 'full example 2 - runapiro.sh v1 apiroexamples-pub clean'
+  echo 'to run standard example - runapiro.sh v1 apiroexamples-pub clean'
   echo 'NOTE: execution uses docker compose - DOCKER must be installed and running'
   echo =======
   exit

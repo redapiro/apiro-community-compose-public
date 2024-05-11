@@ -10,12 +10,13 @@ SET SUBFILE=
 
 IF NOT "%1"=="v1" (
     echo =========
-    echo usage runapiro v1 profile clean
-    echo v1 is required as first param
-    echo profile sets the env file to initialise with ie default will use apiro-default-properties.env'
-    echo clean is optional - if set it starts mongo db empty
+    echo usage: runapiro v1 profile clean
+    echo v1 is required as first param and allows for future backward compatibility on changes
+    echo profile sets the env file to initialise with ie profile default will use apiro-default-properties.env
+    echo clean is optional - if set it starts mongo db empty otherwise mongo database state is retained between executions
     echo full example 1 - runapiro.bat v1 default
     echo full example 2 - runapiro.bat v1 default clean
+    echo to run standard example - runapiro.bat v1 apiroexamples-pub clean
     echo NOTE: execution uses docker compose - DOCKER must be installed and running
     echo =========
     exit
