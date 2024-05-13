@@ -10,13 +10,12 @@ SET SUBFILE=
 
 IF NOT "%1"=="v1" (
     echo =========
-    echo usage: runapiro v1 profile clean
-    echo v1 is required as first param and allows for future backward compatibility on changes
-    echo profile sets the env file to initialise with ie profile default will use apiro-default-properties.env
-    echo clean is optional - if set it starts mongo db empty otherwise mongo database state is retained between executions
+    echo usage runapiro v1 profile clean
+    echo v1 is required as first param
+    echo profile sets the env file to initialise with ie default will use apiro-default-properties.env'
+    echo clean is optional - if set it starts mongo db empty
     echo full example 1 - runapiro.bat v1 default
     echo full example 2 - runapiro.bat v1 default clean
-    echo to run standard example - runapiro.bat v1 apiroexamples-pub clean
     echo NOTE: execution uses docker compose - DOCKER must be installed and running
     echo =========
     exit
@@ -43,7 +42,7 @@ SET APIRO_MONGO_PORT=27018
 
 SET COMPOSE_NAME=apiro1
 
-SET APIRO_PREPAUSE=3
+#SET APIRO_PREPAUSE=3
 
 SET FULLFILE=apiro-%SUBFILE%properties.env
 
@@ -70,9 +69,9 @@ SET /a APIRO_WS_PORT=%APIRO_WEB_PORT%+2
 echo USING ENV FILE %FULLFILE%
 echo COMPOSE NAME is %COMPOSE_NAME%
 echo USING WEB PORTS %APIRO_WEB_PORT% %APIRO_REST_PORT% %APIRO_WS_PORT% - BROWSER TO localhost:%APIRO_WEB_PORT%
-echo USING MONGO PORT %APIRO_MONGO_PORT%
+echo USING MONGO PORT %APIRO_MONGO_PORT% - MONGO TOOLING TO localhost:%APIRO_MONGO_PORT%
 echo USING DOCKER IMAGES: %APIRO_BE_REPO%:%APIRO_BE_IMAGEID% %APIRO_FE_REPO%:%APIRO_FE_IMAGEID%
-echo PAUSING SERVER EXEC FOR %APIRO_PREPAUSE% SECONDS TO ALLOW MONGO TO INITIALISE
+#echo PAUSING SERVER EXEC FOR %APIRO_PREPAUSE% SECONDS TO ALLOW MONGO TO INITIALISE
 
 REM docker compose -p %COMPOSE_NAME% down
 docker compose pull

@@ -10,6 +10,7 @@ services:
       - ./apiro-output:/apiro-output
       - ./apiro-input:/apiro-input
       - ./maven:/maven
+      - ./mongo-data:/mongdat
     deploy:
       resources:
         limits:
@@ -33,6 +34,11 @@ services:
       APIRO_WORKDIR: /apirowork
       MAVEN_HOME: /maven
       JVM_OPTS: ${JVM_OPTS} -Dimportfeed=${RUNFEED_ON_START} -Dprepause=${APIRO_PREPAUSE} -XX:+UseZGC -XX:+ZGenerational
+      LANG: en_US.UTF-8
+      LANGUAGE: en_US.UTF-8
+      LC_CTYPE: en_US.UTF-8
+    entrypoint: [ "sh", "-c", "while [ ! -f /mongdat/RSMARKER ]; do echo waiting for mongo; sleep 2; done; java --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.math=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED $JVM_OPTS -jar /app/app.jar" ]
+
   frontend:
     image: ${APIRO_FE_REPO}:${APIRO_FE_IMAGEID}
     restart: always
@@ -73,5 +79,5 @@ services:
         limits:
 #          cpus: '0.1'
           memory: 100M
-    entrypoint: [ "sh", "-c", "until mongosh --host mongo -eval 'print(\"waiting for connection\")'; do sleep 2; done;  if [ ! -f /md/RSMARKER ]; then echo INITIALIZING REPLSET!!!!!!; mongosh --host mongo --eval 'rs.initiate({_id: \"rs0\", members: [{ _id: 0, host: \"mongo\" }]})'; fi; touch /md/RSMARKER"]
+    entrypoint: [ "sh", "-c", "until mongosh --host mongo -eval 'print(\"waiting for connection\")'; do sleep 2; echo waiting for mongo; done;  if [ ! -f /md/RSMARKER ]; then echo INITIALIZING REPLSET!!!!!!; mongosh --host mongo --eval 'rs.initiate({_id: \"rs0\", members: [{ _id: 0, host: \"mongo\" }]})'; fi; touch /md/RSMARKER"]
 

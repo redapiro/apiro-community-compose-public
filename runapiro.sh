@@ -23,12 +23,11 @@ fi
 if [ ! "$1" == "v1" ]; then
   echo =======
   echo 'usage: runapiro.sh v1 <profile> [clean]'
-  echo 'v1 is the version of program argument options to use and is currently the only option. allows for backward compatible changes'
+  echo 'v1 is the version of program argumentoptions to use and is currently the only option. allows for backward compatible changes'
   echo '<profile> sets the env file to initialise with ie profile "default" will use apiro-default-properties.env'
-  echo 'clean is optional - if set it starts mongo db empty otherwise mongo db state is retained between executions'
+  echo 'clean is optional - if set it starts mongo db empty'
   echo 'full example 1 - runapiro.sh v1 myprof'
   echo 'full example 2 - runapiro.sh v1 apiroexamples-pub clean'
-  echo 'to run standard example - runapiro.sh v1 apiroexamples-pub clean'
   echo 'NOTE: execution uses docker compose - DOCKER must be installed and running'
   echo =======
   exit
@@ -89,15 +88,15 @@ export APIRO_MONGO_PORT
 
 export COMPOSE_NAME
 
-export APIRO_PREPAUSE
+#export APIRO_PREPAUSE
 
 echo USING ENV FILE $FULLFILE
 echo COMPOSE NAME is $COMPOSE_NAME
 echo BINDING WEB PORTS $APIRO_WEB_PORT $APIRO_REST_PORT $APIRO_WS_PORT - BROWSER TO localhost:$APIRO_WEB_PORT
-echo BINDING MONGO PORT $APIRO_MONGO_PORT
+echo BINDING MONGO PORT $APIRO_MONGO_PORT - MONGO TOOLING TO localhost:$APIRO_MONGO_PORT
 echo USING DOCKER IMAGES $APIRO_BE_REPO:$APIRO_BE_IMAGEID $APIRO_FE_REPO:$APIRO_FE_IMAGEID
-echo PAUSING SERVER EXEC FOR $APIRO_PREPAUSE SECONDS TO ALLOW MONGO INITIALISATION
+#echo PAUSING SERVER EXEC FOR $APIRO_PREPAUSE SECONDS TO ALLOW MONGO INITIALISATION
 
 # docker compose -p $COMPOSE_NAME down
 docker compose pull
-docker compose --env-file "$FULLFILE" -p $COMPOSE_NAME up --attach app
+docker compose --env-file "$FULLFILE" -p $COMPOSE_NAME up --attach app --attach mongoinit
