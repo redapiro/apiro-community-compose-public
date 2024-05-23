@@ -79,7 +79,6 @@ export APIRO_BE_REPO
 export APIRO_FE_REPO
 
 export JVM_OPTS
-export RUNFEED_ON_START
 
 export APIRO_WEB_PORT
 export APIRO_REST_PORT
@@ -88,15 +87,20 @@ export APIRO_MONGO_PORT
 
 export COMPOSE_NAME
 
-#export APIRO_PREPAUSE
+export JVM_OPTS_1
+export JVM_OPTS_2
+export JVM_OPTS_3
+export JVM_OPTS_4
+export JVM_OPTS_5
 
 echo USING ENV FILE $FULLFILE
 echo COMPOSE NAME is $COMPOSE_NAME
 echo BINDING WEB PORTS $APIRO_WEB_PORT $APIRO_REST_PORT $APIRO_WS_PORT - BROWSER TO localhost:$APIRO_WEB_PORT
 echo BINDING MONGO PORT $APIRO_MONGO_PORT - MONGO TOOLING TO localhost:$APIRO_MONGO_PORT
 echo USING DOCKER IMAGES $APIRO_BE_REPO:$APIRO_BE_IMAGEID $APIRO_FE_REPO:$APIRO_FE_IMAGEID
+
 #echo PAUSING SERVER EXEC FOR $APIRO_PREPAUSE SECONDS TO ALLOW MONGO INITIALISATION
 
 # docker compose -p $COMPOSE_NAME down
 docker compose pull
-docker compose --env-file "$FULLFILE" -p $COMPOSE_NAME up --attach app --attach mongoinit
+docker compose --env-file "$FULLFILE" -p $COMPOSE_NAME up --attach server --attach mongoinit

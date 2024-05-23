@@ -42,8 +42,6 @@ SET APIRO_MONGO_PORT=27018
 
 SET COMPOSE_NAME=apiro1
 
-#SET APIRO_PREPAUSE=3
-
 SET FULLFILE=apiro-%SUBFILE%properties.env
 
 IF NOT EXIST %FULLFILE% (
@@ -75,4 +73,4 @@ echo USING DOCKER IMAGES: %APIRO_BE_REPO%:%APIRO_BE_IMAGEID% %APIRO_FE_REPO%:%AP
 
 REM docker compose -p %COMPOSE_NAME% down
 docker compose pull
-docker compose --env-file %FULLFILE% -p %COMPOSE_NAME% up --attach app --attach mongoinit
+docker compose --env-file %FULLFILE% -p %COMPOSE_NAME% up --attach server --attach mongoinit

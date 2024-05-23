@@ -1,5 +1,5 @@
 services:
-  app:
+  server:
     image: ${APIRO_BE_REPO}:${APIRO_BE_IMAGEID}
     ports:
       - ${APIRO_REST_PORT}:80
@@ -21,7 +21,7 @@ services:
     environment:
       APIRO_SYS_SECRET: knlfdafpjiu49q3tuhuhfa98uryu8twhaiehf8twiufahp849rhwafewr43wrfwe
       APIRO_JWT_SECRET: sdfgdfgsdfkgji5j09yt45gktrspogk0e9090gk0w9se0erfdogk490095635465
-      APIRO_HAZELMEMBER: app
+      APIRO_HAZELMEMBER: server
       APIRO_HAZELSMARTROUTE: false
       APIRO_ALWAYSMASTER: true
       SPRING_DATA_MONGODB_URI: mongodb://mongo/apiro
@@ -33,12 +33,11 @@ services:
       SERVER_PORT: 80
       APIRO_WORKDIR: /apirowork
       MAVEN_HOME: /maven
-      JVM_OPTS: ${JVM_OPTS} -Dimportfeed=${RUNFEED_ON_START} -Dprepause=${APIRO_PREPAUSE} -XX:+UseZGC -XX:+ZGenerational
+      WEBDRIVER_URL: "http://selenchrome:4444/wd/hub"
       LANG: en_US.UTF-8
       LANGUAGE: en_US.UTF-8
       LC_CTYPE: en_US.UTF-8
-    entrypoint: [ "sh", "-c", "while [ ! -f /mongdat/RSMARKER ]; do echo waiting for mongo; sleep 2; done; java --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.math=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED $JVM_OPTS -jar /app/app.jar" ]
-
+    entrypoint: [ "sh", "-c", "while [ ! -f /mongdat/RSMARKER ]; do echo waiting for mongo; sleep 2; done; java --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.math=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED $JVM_OPTS1 $JVM_OPTS2 $JVM_OPTS3 $JVM_OPTS4 $JVM_OPTS5 -XX:+UseZGC -XX:+ZGenerational -jar /app/app.jar" ]
   frontend:
     image: ${APIRO_FE_REPO}:${APIRO_FE_IMAGEID}
     restart: always
@@ -80,4 +79,9 @@ services:
 #          cpus: '0.1'
           memory: 100M
     entrypoint: [ "sh", "-c", "until mongosh --host mongo -eval 'print(\"waiting for connection\")'; do sleep 2; echo waiting for mongo; done;  if [ ! -f /md/RSMARKER ]; then echo INITIALIZING REPLSET!!!!!!; mongosh --host mongo --eval 'rs.initiate({_id: \"rs0\", members: [{ _id: 0, host: \"mongo\" }]})'; fi; touch /md/RSMARKER"]
+  selenchrome:
+    image: selenium/standalone-chrome:latest
+    platform: linux/amd64
+    restart: on-failure:1
+
 
