@@ -1,15 +1,15 @@
 services:
   server:
     image: ${APIRO_BE_REPO}:${APIRO_BE_IMAGEID}
-    ports:
-      - ${APIRO_REST_PORT}:80
-      - ${APIRO_WS_PORT}:81
+#    ports:
+#      - ${APIRO_REST_PORT}:80
+#      - ${APIRO_WS_PORT}:81
     working_dir: /workdir
     volumes:
       - ./apiro-workdir:/apirowork
       - ./apiro-output:/apiro-output
       - ./apiro-input:/apiro-input
-      - ./maven:/maven
+      - ./apiro-conf/maven:/maven
       - ./mongo-data:/mongdat
     deploy:
       resources:
@@ -25,7 +25,7 @@ services:
       APIRO_HAZELSMARTROUTE: false
       APIRO_ALWAYSMASTER: true
       SPRING_DATA_MONGODB_URI: mongodb://mongo/apiro
-      SPRING_PROFILES_ACTIVE: compose,NOCORS
+      SPRING_PROFILES_ACTIVE: compose
       APIRO_ADMINUSER: admin
       APIRO_ADMINKEYSECRET: "93718395736384984363"
       APIRO_INSTANCEID: APIRO_PRE_DEMO
@@ -42,15 +42,17 @@ services:
     image: ${APIRO_FE_REPO}:${APIRO_FE_IMAGEID}
     restart: always
     ports:
-      - ${APIRO_WEB_PORT}:80
+      - ${APIRO_SRV_PORT}:80
+    volumes:
+      - ./apiro-conf/nginx/apiro.conf:/etc/nginx/conf.d/apiro.conf
     deploy:
       resources:
         limits:
 #          cpus: '1.0'
           memory: 100M
     environment:
-      BASE_PORT: ${APIRO_WEB_PORT}
-    entrypoint: [ "sh", "-c", "echo STARTING UP NGINX WITH BASE REST PORT $APIRO_REST_PORT; echo $APIRO_REST_PORT > /usr/share/nginx/html/assets/assets/misc/api.txt; echo KICKING OFF ENTRYPOINT; nginx -g 'daemon off;'" ]
+      BASE_PORT: ${APIRO_SRV_PORT}
+    entrypoint: [ "sh", "-c", "echo STARTING UP NGINX WITH BASE REST PORT $APIRO_SRV_PORT; echo $APIRO_SRV_PORT > /usr/share/nginx/html/assets/assets/misc/apiold.txt; echo KICKING OFF ENTRYPOINT; nginx -g 'daemon off;'" ]
   mongo:
     image: mongo:7
     restart: always
@@ -83,5 +85,4 @@ services:
     image: selenium/standalone-chrome:latest
     platform: linux/amd64
     restart: on-failure:1
-
 
