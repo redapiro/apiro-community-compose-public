@@ -42,7 +42,7 @@ services:
     image: ${APIRO_FE_REPO}:${APIRO_FE_IMAGEID}
     restart: always
     ports:
-      - ${APIRO_SRV_PORT}:80
+      - ${APIRO_SRV_PORT}:90
     volumes:
       - ./apiro-conf/nginx/apiro.conf:/etc/nginx/conf.d/apiro.conf
     deploy:

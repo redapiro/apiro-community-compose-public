@@ -101,4 +101,4 @@ echo USING DOCKER IMAGES $APIRO_BE_REPO:$APIRO_BE_IMAGEID $APIRO_FE_REPO:$APIRO_
 
 # docker compose -p $COMPOSE_NAME down
 docker compose pull
-docker compose --env-file "$FULLFILE" -p $COMPOSE_NAME up --attach server --attach mongoinit
+docker compose --env-file "$FULLFILE" -p $COMPOSE_NAME up --attach server --attach frontend --attach mongoinit
