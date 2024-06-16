@@ -15,7 +15,7 @@ services:
       resources:
         limits:
 #          cpus: '2.0'
-          memory: 6000M
+          memory: ${SERVER_MEM}
     env_file:
       - apiro-${SUBFILE}properties.env
     environment:
