@@ -43,6 +43,8 @@ services:
     restart: always
     ports:
       - ${APIRO_SRV_PORT}:90
+    links:
+      - server:server
     volumes:
       - ./apiro-conf/nginx/apiro.conf:/etc/nginx/conf.d/apiro.conf
     deploy:
